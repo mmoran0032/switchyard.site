@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Switchyard</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/keen-dashboards.css" />
+    <link rel="stylesheet" type="text/css" href="../static/css/switchyard.css" />
+</head>
+
+<body class="application">
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <a href="/">
+            <img src="../static/images/Switchyard.png" />
+            <!-- <img src="../static/images/{{logo_file}}" /> -->
+            </a>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row" style="width: 85%; margin: auto;">
+            <div class="col-sm-8"><div class="chart-wrapper">
+                <div class="chart-title">
+                    <h3 id="main-station">Selected station</h3>
+                </div>
+                <div class="chart-stage">
+                    <div id="grid-1-1">
+                        <div id="graph-2"></div>
+                    </div>
+                </div>
+                <div class="chart-notes">
+                    Notes about this chart
+                </div>
+            </div></div>
+            <div class="col-sm-4"><div class="chart-wrapper">
+                <div class="chart-title">
+                    <h3>Details</h3>
+                </div>
+                <div class="chart-stage">
+                    <p>
+                        <select id="dropdown-stations">
+                        {% for unit, station, line, color in details %}
+                        <option value="{{unit}}">{{station}} | {{line}}</option>
+                        {% endfor %}
+                        </select>
+                    </p><p>
+                        <button type="button" onclick="submit()">SUBMIT</button>
+                    </p>
+                    <p>After selecting a station, the primary chart shows you an
+                        overview of the ridership at that station over the last few
+                        months. The charts below show the effect of closing that
+                        station on the six stations that are most affected by the
+                        closure.
+                    </p>
+                    <p><b>Data:</b><br />
+                        Turnstile data from the last seven years provided
+                        by the MTA, available through their developer
+                        <b><a href="http://web.mta.info/developers/turnstile.html">website</a></b>.
+                        Data was cleaned and combined to get an understanding of the
+                        ridership across the city.
+                    </p>
+                    <p><b>Model:</b><br />
+                        Bayesian inference on the ridership changes
+                        following a shutdown or reopening within the last seven years
+                        to infer riders' underlying motivations of choosing one
+                        station over another.
+                    </p>
+                    <p><b>Problem and Solution:</b><br />
+                        If a station needs to be shut down, either as a temporary
+                        change or for extended repairs, the riders that used that
+                        station may switch to another one. Understanding how those
+                        passengers redistribute themselves in order to provide the
+                        correct amount of staffing at those affected stations.
+                    </p>
+                </div>
+                <div class="chart-notes">
+                    Learn more about the fellow
+                    <b><a href="/about">here</a></b>
+                </div>
+            </div></div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="col-sm-6 col-md-4"><div class="chart-wrapper">
+                <div class="chart-title">
+                    Cell Title
+                </div>
+                <div class="chart-stage">
+                    <div>
+                        <div id="graph-1"></div>
+                    </div>
+                </div>
+                <div class="chart-notes">
+                    Notes about this chart
+                </div>
+            </div></div>
+            <div class="col-sm-6 col-md-4"><div class="chart-wrapper">
+                <div class="chart-title">
+                    Cell Title
+                </div>
+                <div class="chart-stage">
+                    <div>
+                        <div id="graph-0"></div>
+                    </div>
+                </div>
+                <div class="chart-notes">
+                    Notes about this chart
+                </div>
+            </div></div>
+            <div class="col-sm-6 col-md-4"><div class="chart-wrapper">
+                <div class="chart-title">
+                    Cell Title
+                </div>
+                <div class="chart-stage">
+                    <img data-src="holder.js/100%x120/white">
+                </div>
+                <div class="chart-notes">
+                    Notes about this chart
+                </div>
+            </div></div>
+<!-- end of three -->
+            <div class="col-sm-6 col-md-4"><div class="chart-wrapper">
+                <div class="chart-title">
+                    Cell Title
+                </div>
+                <div class="chart-stage">
+                    <img data-src="holder.js/100%x120/white">
+                </div>
+                <div class="chart-notes">
+                    Notes about this chart
+                </div>
+            </div></div>
+            <div class="col-sm-6 col-md-4"><div class="chart-wrapper">
+                <div class="chart-title">
+                    Cell Title
+                </div>
+                <div class="chart-stage">
+                    <img data-src="holder.js/100%x120/white">
+                </div>
+                <div class="chart-notes">
+                    Notes about this chart
+                </div>
+            </div></div>
+            <div class="col-sm-6 col-md-4"><div class="chart-wrapper">
+                <div class="chart-title">
+                    Cell Title
+                </div>
+                <div class="chart-stage">
+                    <img data-src="holder.js/100%x120/white">
+                </div>
+                <div class="chart-notes">
+                    Notes about this chart
+                </div>
+            </div></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p class="small text-muted">Created for Insight Data Science NYC
+            (Summer 2017) |
+            <a href='https://github.com/mmoran0032/switchyard'>Code on
+            GitHub</a>
+        </p>
+    </div>
+
+    <script type="text/javascript" src="../static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../static/js/holder.js"></script>
+    <script>
+        Holder.add_theme("white",
+            { background:"#fff", foreground:"#a7a7a7", size:10 });
+    </script>
+    <script type="text/javascript" src="../static/js/keen.min.js"></script>
+    <script type="text/javascript" src="../static/js/meta.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js"></script>
+    <script src="https://d14fo0winaifog.cloudfront.net/plotly-basic.js"></script>
+    <script>
+    function submit() {
+        var e = document.getElementById("dropdown-stations");
+        var unit = e.options[e.selectedIndex].value;
+        window.location = '/index?i=' + e.selectedIndex + '&unit=' + unit;
+    };
+
+    function getRequests() {
+        var s = location.search.substring(1, location.search.length).split('&');
+        var r = {}, s2, i;
+        for (i = 0; i < s.length; i += 1) {
+            s2 = s[i].split('=');
+            r[decodeURIComponent(s2[0]).toLowerCase()] =
+                decodeURIComponent(s2[1]);
+        }
+        return r;
+    };
+
+    window.onload = function() {
+        var QueryString = getRequests();
+        var i = QueryString["i"];
+        var e = document.getElementById("dropdown-stations");
+        e.selectedIndex = i;
+        var station = e.options[i].innerHTML;
+        document.getElementById("main-station").innerHTML =
+            'Selected station: ' + station;
+    };
+    </script>
+    <script type="text/javascript">
+        var graphs = {{graphJSON | safe}};
+        var ids = {{ids | safe}};
+        Plotly.plot(ids[2], // the ID of the div, created above
+                    graphs[2].data,
+                    graphs[2].layout || {});
+    </script>
+</body>
+</html>

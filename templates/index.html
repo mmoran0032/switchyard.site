@@ -12,8 +12,8 @@
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <a href="/">
-            <img src="../static/images/Switchyard.png" />
-            <!-- <img src="../static/images/{{logo_file}}" /> -->
+            <!-- <img src="../static/images/Switchyard.png" /> -->
+            <img src="../static/images/{{logo_file}}" />
             </a>
         </div>
     </div>
@@ -22,11 +22,11 @@
         <div class="row" style="width: 85%; margin: auto;">
             <div class="col-sm-8"><div class="chart-wrapper">
                 <div class="chart-title">
-                    <h3 id="main-station">Selected station</h3>
+                    <h3 id="station-0">Selected station</h3>
                 </div>
                 <div class="chart-stage">
                     <div>
-                        <div id="graph-2"></div>
+                        <div id="graph-0"></div>
                     </div>
                 </div>
                 <div class="chart-notes">
@@ -83,14 +83,14 @@
 
         <hr>
 
-        <div class="row">
+        <div class="row" style="width: 95%; margin: auto;">
             <div class="col-sm-6 col-md-4"><div class="chart-wrapper">
                 <div class="chart-title">
-                    Cell Title
+                    <h3 id="station-1">Selected station</h3>
                 </div>
                 <div class="chart-stage">
                     <div>
-                        <div id="graph-1"></div>
+                        <div id="graph-1" style="height: 200px;"></div>
                     </div>
                 </div>
                 <div class="chart-notes">
@@ -99,11 +99,11 @@
             </div></div>
             <div class="col-sm-6 col-md-4"><div class="chart-wrapper">
                 <div class="chart-title">
-                    Cell Title
+                    <h3 id="station-2">Selected station</h3>
                 </div>
                 <div class="chart-stage">
                     <div>
-                        <div id="graph-0"></div>
+                        <div id="graph-2" style="height: 200px;"></div>
                     </div>
                 </div>
                 <div class="chart-notes">
@@ -112,10 +112,12 @@
             </div></div>
             <div class="col-sm-6 col-md-4"><div class="chart-wrapper">
                 <div class="chart-title">
-                    Cell Title
+                    <h3 id="station-3">Selected station</h3>
                 </div>
                 <div class="chart-stage">
-                    <img data-src="holder.js/100%x120/white">
+                    <div>
+                        <div id="graph-3" style="height: 200px;"></div>
+                    </div>
                 </div>
                 <div class="chart-notes">
                     Notes about this chart
@@ -124,10 +126,12 @@
 <!-- end of three -->
             <div class="col-sm-6 col-md-4"><div class="chart-wrapper">
                 <div class="chart-title">
-                    Cell Title
+                    <h3 id="station-4">Selected station</h3>
                 </div>
                 <div class="chart-stage">
-                    <img data-src="holder.js/100%x120/white">
+                    <div>
+                        <div id="graph-4" style="height: 200px;"></div>
+                    </div>
                 </div>
                 <div class="chart-notes">
                     Notes about this chart
@@ -135,10 +139,12 @@
             </div></div>
             <div class="col-sm-6 col-md-4"><div class="chart-wrapper">
                 <div class="chart-title">
-                    Cell Title
+                    <h3 id="station-5">Selected station</h3>
                 </div>
                 <div class="chart-stage">
-                    <img data-src="holder.js/100%x120/white">
+                    <div>
+                        <div id="graph-5" style="height: 200px;"></div>
+                    </div>
                 </div>
                 <div class="chart-notes">
                     Notes about this chart
@@ -146,10 +152,12 @@
             </div></div>
             <div class="col-sm-6 col-md-4"><div class="chart-wrapper">
                 <div class="chart-title">
-                    Cell Title
+                    <h3 id="station-6">Selected station</h3>
                 </div>
                 <div class="chart-stage">
-                    <img data-src="holder.js/100%x120/white">
+                    <div>
+                        <div id="graph-6" style="height: 200px;"></div>
+                    </div>
                 </div>
                 <div class="chart-notes">
                     Notes about this chart
@@ -201,9 +209,10 @@
         var i = QueryString["i"];
         var e = document.getElementById("dropdown-stations");
         e.selectedIndex = i;
-        var station = e.options[i].innerHTML;
-        document.getElementById("main-station").innerHTML =
-            'Selected station: ' + station;
+        var names = {{names | safe}};
+        for(var i in names) {
+            document.getElementById("station-" + i).innerHTML = names[i];
+        };
     };
     </script>
     <script type="text/javascript">

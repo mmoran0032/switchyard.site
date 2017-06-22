@@ -8,7 +8,6 @@ import os
 import random
 
 import numpy as np
-import pandas as pd
 import plotly
 
 from . import app, model
@@ -22,23 +21,26 @@ model = model.Model()
 def index():
     unit = request.args.get('unit')
     index = request.args.get('i')
-    unit = 'R001' if unit is None else unit
+    unit = 'R248' if unit is None else unit
     index = 1 if index is None else index
     logo_file = get_random_logo()
     details = sorted([(u, *d) for u, d in
                       zip(model.details.index, model.details.values)],
                      key=lambda x: x[1])
-
-    graphs = build_graphs()
-    ids = ['graph-{}'.format(i) for i, _ in enumerate(graphs)]
+    test_units = [unit, *np.random.choice(
+        model.details.index.values, size=6, replace=False)]
+    graphs = build_graphs(test_units)
+    ids = [f'graph-{i}' for i, _ in enumerate(graphs)]
+    names = [create_name_string(u) for u in test_units]
     graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
 
     return render_template('index.html',
                            unit=unit,
                            index=index,
                            logo_file=logo_file,
-                           ids=ids,
                            details=details,
+                           ids=ids,
+                           names=json.dumps(names),
                            graphJSON=graphJSON)
 
 
@@ -49,54 +51,8 @@ def get_random_logo():
     return random.choice(files)
 
 
-def build_graphs():
-    rng = pd.date_range('1/1/2011', periods=7500, freq='H')
-    ts = pd.Series(np.random.randn(len(rng)), index=rng)
-    ts = np.abs(ts)
-
-    graphs = [
-        dict(
-            data=[
-                dict(
-                    x=[1, 2, 3],
-                    y=[10, 20, 30],
-                    type='scatter'
-                ),
-            ],
-            layout=dict(
-                title='first graph'
-            )
-        ),
-
-        dict(
-            data=[
-                dict(
-                    x=[1, 3, 5],
-                    y=[10, 50, 30],
-                    type='bar',
-                    marker=dict(
-                        color=('rgb(30,145,20)')
-                    )
-                ),
-            ],
-            layout=dict(
-                title='second graph'
-            )
-        ),
-
-        dict(
-            data=[
-                dict(
-                    x=ts.index,  # Can use the pandas data structures directly
-                    y=ts,
-                    type='bar',
-                    marker=dict(
-                        color=('rgb(145,20,30)')
-                    )
-                )
-            ]
-        )
-    ]
+def build_graphs(units):
+    graphs = [create_single_graph(u) for u in units]
     return graphs
 
 
@@ -104,10 +60,16 @@ def create_single_graph(unit):
     color = model.details.loc[unit, 'color']
     x = model.ridership.index
     y = model.ridership[unit]
-    type = 'bar'
-    marker = dict(color=(color))
-    data = dict(x=x, y=y, type=type, marker=marker)
-    return dict(data=data)
+    marker = dict(color=color)
+    data = [dict(x=x, y=y, type='bar', marker=marker)]
+    layout = dict(margin=dict(l=50, r=50, b=50, t=50, pad=4))
+    return dict(data=data, layout=layout)
+
+
+def create_name_string(unit):
+    station = model.details.loc[unit, 'station']
+    line = model.details.loc[unit, 'line']
+    return f'{station} | {line}'
 
 
 @app.route('/about')

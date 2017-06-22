@@ -1,6 +1,7 @@
 body {
     font-family: Helvetica, sans-serif;
     min-width: 600px;
+    font-size: 14px;
 }
 body.application {
     padding-top: 120px;

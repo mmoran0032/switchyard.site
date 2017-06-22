@@ -1,12 +1,15 @@
 
 
+import os
+
 import numpy as np
 import pandas as pd
 
 
 class Model:
     def __init__(self):
-        self.data_directory = 'switchyard/static/data'
+        print(os.getcwd())
+        self.data_directory = 'switchyard_site/static/data'
         self.ridership = pd.read_csv(
             f'{self.data_directory}/ridership_since_dec.csv')
         self.ridership.set_index('date', inplace=True)
@@ -14,8 +17,9 @@ class Model:
         self.ratios = pd.read_csv(
             f'{self.data_directory}/ratio.csv')
         self.ratios.set_index('unit', inplace=True)
-        self.details = pd.read_csv(
+        self.details = (pd.read_csv(
             f'{self.data_directory}/line_station_color_details.csv')
+            .set_index('unit'))
         self.station_data = None
         self.affected_station_data = None
 

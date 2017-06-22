@@ -25,7 +25,7 @@
                     <h3 id="main-station">Selected station</h3>
                 </div>
                 <div class="chart-stage">
-                    <div id="grid-1-1">
+                    <div>
                         <div id="graph-2"></div>
                     </div>
                 </div>
@@ -209,9 +209,11 @@
     <script type="text/javascript">
         var graphs = {{graphJSON | safe}};
         var ids = {{ids | safe}};
-        Plotly.plot(ids[2], // the ID of the div, created above
-                    graphs[2].data,
-                    graphs[2].layout || {});
+        for(var i in graphs) {
+            Plotly.plot(ids[i], // the ID of the div, created above
+                        graphs[i].data,
+                        graphs[i].layout || {});
+        }
     </script>
 </body>
 </html>

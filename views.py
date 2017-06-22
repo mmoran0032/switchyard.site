@@ -24,12 +24,10 @@ def index():
     index = request.args.get('i')
     unit = 'R001' if unit is None else unit
     index = 1 if index is None else index
-    model.update(unit)
-    details = model.details.values.tolist()
-    details.sort(key=lambda x: x[1])
-    color = model.get_color(unit)
-    affected = condense_affected_data()
     logo_file = get_random_logo()
+    details = sorted([(u, *d) for u, d in
+                      zip(model.details.index, model.details.values)],
+                     key=lambda x: x[1])
 
     graphs = build_graphs()
     ids = ['graph-{}'.format(i) for i, _ in enumerate(graphs)]
@@ -38,33 +36,17 @@ def index():
     return render_template('index.html',
                            unit=unit,
                            index=index,
-                           details=details,
                            logo_file=logo_file,
-                           data=model.station_data,
-                           affected=affected,
-                           color=color,
                            ids=ids,
+                           details=details,
                            graphJSON=graphJSON)
 
 
 def get_random_logo():
     print(os.getcwd())
     files = list(filter(lambda x: x.endswith('png'),
-                        os.listdir('switchyard/static/images')))
+                        os.listdir('switchyard_site/static/images')))
     return random.choice(files)
-
-
-def condense_affected_data():
-    details = []
-    for station in model.affected_station_data:
-        # station contains two dataframes, one for before and after shock
-        unit = station.name
-        unit_details = model.details[model.details.unit == unit]
-        name = unit_details['station'].iloc[0]
-        line = unit_details['line'].iloc[0]
-        color = unit_details['color'].iloc[0]
-        details.append((name, line, color, station))
-    return details
 
 
 def build_graphs():
@@ -72,7 +54,7 @@ def build_graphs():
     ts = pd.Series(np.random.randn(len(rng)), index=rng)
     ts = np.abs(ts)
 
-    return [
+    graphs = [
         dict(
             data=[
                 dict(
@@ -91,7 +73,10 @@ def build_graphs():
                 dict(
                     x=[1, 3, 5],
                     y=[10, 50, 30],
-                    type='bar'
+                    type='bar',
+                    marker=dict(
+                        color=('rgb(30,145,20)')
+                    )
                 ),
             ],
             layout=dict(
@@ -104,17 +89,25 @@ def build_graphs():
                 dict(
                     x=ts.index,  # Can use the pandas data structures directly
                     y=ts,
-                    line=dict(
-                        color=('rgb(30,105,10)'),
-                        width=2
+                    type='bar',
+                    marker=dict(
+                        color=('rgb(145,20,30)')
                     )
                 )
-            ],
-            layout=dict(
-                title='test time series graph'
-            )
+            ]
         )
     ]
+    return graphs
+
+
+def create_single_graph(unit):
+    color = model.details.loc[unit, 'color']
+    x = model.ridership.index
+    y = model.ridership[unit]
+    type = 'bar'
+    marker = dict(color=(color))
+    data = dict(x=x, y=y, type=type, marker=marker)
+    return dict(data=data)
 
 
 @app.route('/about')

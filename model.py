@@ -9,7 +9,7 @@ import pandas as pd
 class Model:
     def __init__(self):
         print(os.getcwd())
-        self.data_directory = 'switchyard_site/static/data'
+        self.data_directory = 'switchyard/static/data'
         self.ridership = pd.read_csv(
             f'{self.data_directory}/ridership_since_dec.csv')
         self.ridership.set_index('date', inplace=True)

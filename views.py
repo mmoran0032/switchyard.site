@@ -73,4 +73,6 @@ def create_name_string(unit):
 
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    logo_file = get_random_logo()
+    return render_template('about.html',
+                           logo_file=logo_file)

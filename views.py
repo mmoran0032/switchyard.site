@@ -44,6 +44,13 @@ def index():
                            graphJSON=graphJSON)
 
 
+@app.route('/about')
+def about():
+    logo_file = get_random_logo()
+    return render_template('about.html',
+                           logo_file=logo_file)
+
+
 def get_random_logo():
     files = list(filter(lambda x: x.lower().startswith('switchyard'),
                         os.listdir('switchyard/static/images')))
@@ -69,10 +76,3 @@ def create_name_string(unit):
     station = model.details.loc[unit, 'station']
     line = model.details.loc[unit, 'line']
     return f'{station} | {line}'
-
-
-@app.route('/about')
-def about():
-    logo_file = get_random_logo()
-    return render_template('about.html',
-                           logo_file=logo_file)

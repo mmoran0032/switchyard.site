@@ -45,7 +45,7 @@ def index():
 
 
 def get_random_logo():
-    files = list(filter(lambda x: x.endswith('png'),
+    files = list(filter(lambda x: x.lower().startswith('switchyard'),
                         os.listdir('switchyard/static/images')))
     return random.choice(files)
 

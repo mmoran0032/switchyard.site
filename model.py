@@ -36,5 +36,4 @@ class Model:
         return delta.sort_values().iloc[:number]
 
     def get_color(self, unit):
-        sub_details = self.details.loc[unit]
-        return sub_details['color'].iloc[0]
+        return self.details.loc[unit, 'color']

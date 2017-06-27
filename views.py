@@ -34,7 +34,8 @@ def index():
     affected = model.affected_station_data
     graphs = build_graphs(unit, affected)
     ids = [f'graph-{i}' for i, _ in enumerate(graphs)]
-    names = [create_name_string(u) for u in affected]
+    names = [create_name_string(u) for u in affected.index]
+    names = [create_name_string(unit), *names]
     graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
 
     return render_template('index.html',
@@ -83,7 +84,7 @@ def create_line_graph(unit, delta):
     y = np.ones(60)
     riders = model.ridership[unit].mean()
     y[:30] = riders
-    y[30:] = riders + delta
+    y[30:] = riders - delta
     marker = dict(color=color)
     data = [dict(x=x, y=y, type='bar', marker=marker)]
     layout = dict(margin=dict(l=50, r=50, b=50, t=50, pad=4))

@@ -31,7 +31,7 @@ def index():
     # test_units = [unit, *np.random.choice(
     # model.details.index.values, size=6, replace=False)]
     model.update(unit)
-    affected = model.affected_station_data.index
+    affected = model.affected_station_data
     graphs = build_graphs(unit, affected)
     ids = [f'graph-{i}' for i, _ in enumerate(graphs)]
     names = [create_name_string(u) for u in affected]

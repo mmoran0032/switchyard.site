@@ -1,13 +1,10 @@
 
 
-import os
-
 import pandas as pd
 
 
 class Model:
     def __init__(self):
-        print(os.getcwd())
         self.data_directory = 'switchyard/static/data'
         self.ridership = pd.read_csv(
             f'{self.data_directory}/ridership_since_dec.csv')
@@ -27,16 +24,7 @@ class Model:
         self.affected_station_data = self.get_most_affected(unit)
 
     def get_main_station(self, unit):
-        return self.ridership.iloc[-60:, unit]
-
-    def get_affected_station(self, unit, delta):
-        print(delta)
-        riders = self.ridership[unit]
-        pre = riders.loc[:'2017-04-30']
-        post = riders.loc['2017-05-01':].add(
-            delta, fill_value=1)
-        riders = pd.concat([pre, post], axis=0)
-        return riders
+        return self.ridership[unit].iloc[-60:]
 
     def get_most_affected(self, unit, number=6):
         ''' get the top `number` stations based on total ridership change at
@@ -48,5 +36,5 @@ class Model:
         return delta.sort_values().iloc[:number]
 
     def get_color(self, unit):
-        sub_details = self.details[self.details.unit == unit]
+        sub_details = self.details.loc[unit]
         return sub_details['color'].iloc[0]

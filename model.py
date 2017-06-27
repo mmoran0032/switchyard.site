@@ -2,7 +2,6 @@
 
 import os
 
-import numpy as np
 import pandas as pd
 
 
@@ -15,7 +14,7 @@ class Model:
         self.ridership.set_index('date', inplace=True)
         self.ridership.columns = self.ridership.columns.str.upper()
         self.ratios = pd.read_csv(
-            f'{self.data_directory}/ratio.csv')
+            f'{self.data_directory}/ratio_sas.csv')
         self.ratios.set_index('unit', inplace=True)
         self.details = (pd.read_csv(
             f'{self.data_directory}/line_station_color_details.csv')
@@ -25,13 +24,10 @@ class Model:
 
     def update(self, unit):
         self.station_data = self.get_main_station(unit)
-        affected = self.get_most_affected(unit)
-        affected_riders = [self.get_affected_station(u, d)
-                           for u, d in zip(affected.index, affected.values)]
-        self.affected_station_data = affected_riders
+        self.affected_station_data = self.get_most_affected(unit)
 
     def get_main_station(self, unit):
-        return self.ridership.loc[:'2017-04-30', unit]
+        return self.ridership.iloc[-60:, unit]
 
     def get_affected_station(self, unit, delta):
         print(delta)
@@ -42,13 +38,14 @@ class Model:
         riders = pd.concat([pre, post], axis=0)
         return riders
 
-    def get_most_affected(self, unit, number=4):
+    def get_most_affected(self, unit, number=6):
+        ''' get the top `number` stations based on total ridership change at
+            that station following closure of station `unit`
+        '''
         effect = self.ratios[unit]
         mean_riders = self.ridership[unit].mean()
         delta = -effect * mean_riders
-        delta_others = np.abs(1 / (effect / mean_riders))
-        print(delta[(delta > 1000) | (delta < -1000)])
-        return (delta_others / delta_others.sum()).sort_values().iloc[:number]
+        return delta.sort_values().iloc[:number]
 
     def get_color(self, unit):
         sub_details = self.details[self.details.unit == unit]

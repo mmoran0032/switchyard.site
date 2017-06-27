@@ -27,11 +27,13 @@ def index():
     details = sorted([(u, *d) for u, d in
                       zip(model.details.index, model.details.values)],
                      key=lambda x: x[1])
-    test_units = [unit, *np.random.choice(
-        model.details.index.values, size=6, replace=False)]
-    graphs = build_graphs(test_units)
+    # test_units = [unit, *np.random.choice(
+    # model.details.index.values, size=6, replace=False)]
+    model.update(unit)
+    affected = model.affected_station_data.index
+    graphs = build_graphs(unit, affected)
     ids = [f'graph-{i}' for i, _ in enumerate(graphs)]
-    names = [create_name_string(u) for u in test_units]
+    names = [create_name_string(u) for u in affected]
     graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
 
     return render_template('index.html',
@@ -57,15 +59,30 @@ def get_random_logo():
     return random.choice(files)
 
 
-def build_graphs(units):
-    graphs = [create_single_graph(u) for u in units]
+def build_graphs(main_unit, others):
+    other_graphs = [create_line_graph(u, d)
+                    for u, d in zip(others.index, others.values)]
+    graphs = [create_single_graph(main_unit), *other_graphs]
     return graphs
 
 
 def create_single_graph(unit):
-    color = model.details.loc[unit, 'color']
+    color = model.get_color(unit)
     x = model.ridership.index
     y = model.ridership[unit]
+    marker = dict(color=color)
+    data = [dict(x=x, y=y, type='bar', marker=marker)]
+    layout = dict(margin=dict(l=50, r=50, b=50, t=50, pad=4))
+    return dict(data=data, layout=layout)
+
+
+def create_line_graph(unit, delta):
+    color = model.get_color(unit)
+    x = np.arange(60)
+    y = np.ones(60)
+    riders = model.ridership[unit].mean()
+    y[:30] = riders
+    y[30:] = riders + delta
     marker = dict(color=color)
     data = [dict(x=x, y=y, type='bar', marker=marker)]
     layout = dict(margin=dict(l=50, r=50, b=50, t=50, pad=4))

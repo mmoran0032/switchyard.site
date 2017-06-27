@@ -28,8 +28,6 @@ def index():
                       zip(model.details.index, model.details.values)
                       if u in model.ratios.index],
                      key=lambda x: x[1])
-    # test_units = [unit, *np.random.choice(
-    # model.details.index.values, size=6, replace=False)]
     model.update(unit)
     affected = model.affected_station_data
     graphs = build_graphs(unit, affected)

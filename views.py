@@ -22,7 +22,7 @@ def index():
     unit = request.args.get('unit')
     index = request.args.get('i')
     unit = 'R570' if unit is None else unit
-    index = 1 if index is None else index
+    index = 14 if index is None else index
     logo_file = get_random_logo()
     details = sorted([(u, *d) for u, d in
                       zip(model.details.index, model.details.values)
@@ -87,7 +87,8 @@ def create_line_graph(unit, delta):
     y[30:] = riders - delta
     marker = dict(color=color)
     data = [dict(x=x, y=y, type='bar', marker=marker)]
-    layout = dict(margin=dict(l=50, r=50, b=50, t=50, pad=4))
+    layout = dict(margin=dict(l=50, r=50, b=50, t=50, pad=4),
+                  xaxis=dict(showticklabels=False))
     return dict(data=data, layout=layout)
 
 

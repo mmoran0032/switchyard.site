@@ -30,7 +30,7 @@ class Model:
         ''' get the top `number` stations based on total ridership change at
             that station following closure of station `unit`
         '''
-        effect = self.ratios[unit]
+        effect = self.ratios[unit].dropna()
         mean_riders = self.ridership[unit].mean()
         delta = -effect * mean_riders
         return delta.sort_values().iloc[:number]

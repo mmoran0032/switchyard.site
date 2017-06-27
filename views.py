@@ -21,11 +21,12 @@ model = model.Model()
 def index():
     unit = request.args.get('unit')
     index = request.args.get('i')
-    unit = 'R248' if unit is None else unit
+    unit = 'R570' if unit is None else unit
     index = 1 if index is None else index
     logo_file = get_random_logo()
     details = sorted([(u, *d) for u, d in
-                      zip(model.details.index, model.details.values)],
+                      zip(model.details.index, model.details.values)
+                      if u in model.ratios.index],
                      key=lambda x: x[1])
     # test_units = [unit, *np.random.choice(
     # model.details.index.values, size=6, replace=False)]
